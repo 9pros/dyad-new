@@ -21,6 +21,7 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
   const [userCode, setUserCode] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [pollingStartTime, setPollingStartTime] = useState<number>(0);
   const { updateSettings } = useSettings();
 
   const startOAuthFlow = async () => {
@@ -38,9 +39,12 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
       await IpcClient.getInstance().openExternalUrl(result.verification_uri_complete);
 
       setStep('polling');
+      setPollingStartTime(Date.now());
 
-      // Start polling for token
-      pollForToken(result.device_code, result.code_verifier, result.interval || 5);
+      // Add a 3-second delay before starting polling to give popup time to load
+      setTimeout(() => {
+        pollForToken(result.device_code, result.code_verifier, result.interval || 5);
+      }, 3000);
     } catch (err) {
       console.error('Failed to start Qwen OAuth:', err);
       setError(err instanceof Error ? err.message : 'Failed to start authentication');
@@ -51,11 +55,30 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
   };
 
   const pollForToken = async (deviceCode: string, codeVerifier: string, interval: number) => {
+    // Check for timeout (15 minutes max)
+    const elapsedTime = Date.now() - pollingStartTime;
+    const maxTime = 15 * 60 * 1000; // 15 minutes
+
+    if (elapsedTime > maxTime) {
+      console.log('Qwen OAuth polling timed out');
+      setError('Authentication timed out. Please try again.');
+      setStep('error');
+      return;
+    }
+
     try {
+      console.log('Polling for Qwen token...', {
+        deviceCode: deviceCode.substring(0, 10) + '...',
+        interval,
+        elapsedSeconds: Math.round(elapsedTime / 1000)
+      });
+
       const result = await IpcClient.getInstance().qwenOAuthToken({
         deviceCode,
         codeVerifier,
       });
+
+      console.log('Qwen token received successfully!');
 
       // Success! Store the tokens
       await updateSettings({
@@ -68,17 +91,38 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
       setStep('success');
       showSuccess('Qwen authentication successful! Pro features are now enabled.');
     } catch (pollError: any) {
-      if (pollError.error === 'authorization_pending') {
+      console.log('Qwen polling error:', pollError);
+
+      // Handle different error types
+      if (pollError?.error === 'authorization_pending') {
+        console.log('Authorization still pending, continuing to poll...');
         // Still waiting for user to authorize, continue polling
         setTimeout(() => pollForToken(deviceCode, codeVerifier, interval), interval * 1000);
-      } else if (pollError.error === 'slow_down') {
+      } else if (pollError?.error === 'slow_down') {
+        console.log('Server requested slower polling, increasing interval...');
         // Slow down polling as requested
         setTimeout(() => pollForToken(deviceCode, codeVerifier, interval + 5), (interval + 5) * 1000);
-      } else {
-        // Real error
-        console.error('Qwen OAuth polling failed:', pollError);
-        setError(pollError.error_description || pollError.error || 'Authentication failed');
+      } else if (pollError?.error === 'access_denied') {
+        console.log('User denied access');
+        setError('Authentication was denied. Please try again.');
         setStep('error');
+      } else if (pollError?.error === 'expired_token') {
+        console.log('Device code expired');
+        setError('The authentication code has expired. Please try again.');
+        setStep('error');
+      } else {
+        // Real error - only show error after several failed attempts or network issues
+        console.error('Qwen OAuth polling failed with unexpected error:', pollError);
+
+        // Check if this is a network/server error that should be retried
+        if (pollError?.message?.includes('fetch') || pollError?.message?.includes('network') || pollError?.code === 'ECONNRESET') {
+          console.log('Network error, retrying...');
+          setTimeout(() => pollForToken(deviceCode, codeVerifier, interval), interval * 1000);
+        } else {
+          // Only show error for actual authentication failures, not temporary issues
+          setError(pollError?.error_description || pollError?.error || pollError?.message || 'Authentication failed');
+          setStep('error');
+        }
       }
     }
   };
