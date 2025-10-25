@@ -1044,7 +1044,8 @@ graph TD
 - **IPC Security**: Qwen OAuth channels (`qwen-oauth:device-code`, `qwen-oauth:token`) whitelisted in preload.ts
 - **OAuth Popup**: Browser reloading fixed by opening OAuth URLs in dedicated popup windows (600x700px) instead of full browser tabs
 - **Polling Fixes**: Added 3-second delay before polling, 15-minute timeout, improved error handling with specific error types, network error retry logic, actual device code expiry time instead of hardcoded timeout
-- **Token Storage**: Fixed Qwen token storage to use proper Secret schema structure with encrypted value property
+- **API URL Fix**: Corrected DashScope API endpoint to use compatible-mode/v1
+- **Model Names**: Updated Qwen model names to match DashScope API identifiers
 - **Token Decryption**: Added proper decryption for Qwen tokens in settings loading
 
 ### Project Launch Verification
