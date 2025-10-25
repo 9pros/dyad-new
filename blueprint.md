@@ -1035,6 +1035,15 @@ graph TD
 - **User Experience**: Seamless OAuth flow with browser auto-opening and code display
 - **Free Tier Access**: 2000 requests/day through Qwen account authentication
 
+### Qwen OAuth Technical Implementation
+- **OAuth Endpoints**: 
+  - Device Code: `https://chat.qwen.ai/api/v1/oauth2/device/code`
+  - Token: `https://chat.qwen.ai/api/v1/oauth2/token`
+- **Client ID**: `f0304373b74a44d2b584a3fb70ca9e56`
+- **Scope**: `openid profile email model.completion`
+- **Security**: PKCE (RFC 7636) with SHA-256 code challenge implementation
+- **Flow**: Device code → User verification → Token polling → Secure storage
+
 ### Provider Configuration Logic
 - **Qwen Special Handling**: `ProviderSettingsPage.tsx` detects `provider === "qwen"` and renders OAuth UI
 - **Status Detection**: `useIsQwenAuthenticated()` hook checks token validity for "Ready" status
