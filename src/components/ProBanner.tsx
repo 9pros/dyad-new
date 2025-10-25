@@ -16,29 +16,10 @@ export function ProBanner() {
   const { settings } = useSettings();
   const { userBudget } = useUserBudgetInfo();
 
-  const [selectedBanner] = useState<"ai" | "smart" | "turbo">(() => {
-    const options = ["ai", "smart", "turbo"] as const;
-    return options[Math.floor(Math.random() * options.length)];
-  });
-
-  if (settings?.enableDyadPro || userBudget) {
-    return (
-      <div className="mt-6 max-w-2xl mx-auto">
-        <ManageDyadProButton />
-      </div>
-    );
-  }
-
+  // Always show manage subscription button since Pro features are always enabled
   return (
     <div className="mt-6 max-w-2xl mx-auto">
-      {selectedBanner === "ai" ? (
-        <AiAccessBanner />
-      ) : selectedBanner === "smart" ? (
-        <SmartContextBanner />
-      ) : (
-        <TurboBanner />
-      )}
-      <SetupDyadProButton />
+      <ManageDyadProButton />
     </div>
   );
 }
