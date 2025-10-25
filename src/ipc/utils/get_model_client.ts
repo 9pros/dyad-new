@@ -393,7 +393,7 @@ function getRegularModelClient(
     case "qwen": {
       // Qwen uses DashScope API with OAuth token
       const qwenToken = settings.qwenAccessToken?.value;
-      const qwenBaseUrl = settings.qwenResourceUrl || "https://dashscope.aliyuncs.com/api/v1";
+      const qwenBaseUrl = settings.qwenResourceUrl || "https://dashscope.aliyuncs.com/compatible-mode/v1";
 
       if (!qwenToken) {
         throw new Error("Qwen access token is required. Please authenticate with Qwen first.");

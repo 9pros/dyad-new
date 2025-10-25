@@ -411,14 +411,14 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
   qwen: [
     // Best coding models first (prioritized for development)
     {
-      name: "qwen3-coder",
-      displayName: "Qwen3 Coder",
-      description: "Qwen's most advanced coding model - best for complex development tasks",
-      maxOutputTokens: 32_000,
+      name: "qwen-coder-turbo",
+      displayName: "Qwen Coder Turbo",
+      description: "Qwen's fastest coding model - best for quick coding tasks",
+      maxOutputTokens: 8_192,
       contextWindow: 131_072,
       temperature: 0,
-      dollarSigns: 3,
-      tag: "Best for Coding",
+      dollarSigns: 2,
+      tag: "Fast Coding",
       tagColor: "#10b981",
     },
     {
@@ -463,7 +463,7 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
     },
     // General purpose models
     {
-      name: "qwen-max-latest",
+      name: "qwen-max",
       displayName: "Qwen Max",
       description: "Qwen's most capable general-purpose model",
       maxOutputTokens: 8_192,
@@ -474,7 +474,7 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       tagColor: "#8b5cf6",
     },
     {
-      name: "qwen-plus-latest",
+      name: "qwen-plus",
       displayName: "Qwen Plus",
       description: "Advanced general-purpose model with strong reasoning",
       maxOutputTokens: 8_192,
@@ -483,7 +483,7 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       dollarSigns: 2,
     },
     {
-      name: "qwen-turbo-latest",
+      name: "qwen-turbo",
       displayName: "Qwen Turbo",
       description: "High-speed model for rapid responses and lightweight tasks",
       maxOutputTokens: 8_192,
@@ -495,7 +495,7 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
     },
     // Specialized models
     {
-      name: "qwen-math-plus-latest",
+      name: "qwen-math-plus",
       displayName: "Qwen Math Plus",
       description: "Specialized model for mathematical reasoning and calculations",
       maxOutputTokens: 4_096,
