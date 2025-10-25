@@ -88,7 +88,7 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
         qwenAccessToken: { value: result.access_token },
         qwenRefreshToken: { value: result.refresh_token || '' },
         qwenTokenExpiry: Date.now() + (result.expires_in * 1000),
-        qwenResourceUrl: result.resource_url || 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+        qwenResourceUrl: result.resource_url || 'https://dashscope.aliyuncs.com/api/v1',
       });
 
       setStep('success');
