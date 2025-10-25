@@ -391,10 +391,11 @@ function getRegularModelClient(
       };
     }
     case "qwen": {
-      // Qwen uses DashScope API with OAuth token
+      // Qwen uses OAuth token with Qwen's API
       const qwenToken = settings.qwenAccessToken?.value;
-      // Use DashScope compatible-mode endpoint
-      const qwenBaseUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1";
+      // Construct proper API URL from resource URL
+      const resourceUrl = settings.qwenResourceUrl || "https://portal.qwen.ai";
+      const qwenBaseUrl = resourceUrl.replace(/\/$/, '') + '/api/v1'; // Remove trailing slash and add /api/v1
 
       if (!qwenToken) {
         throw new Error("Qwen access token is required. Please authenticate with Qwen first.");
