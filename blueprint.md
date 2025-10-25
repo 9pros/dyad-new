@@ -1041,6 +1041,7 @@ graph TD
 - **Token Storage**: Qwen tokens stored in `qwenAccessToken`, `qwenRefreshToken`, `qwenTokenExpiry` settings
 - **Base URL Management**: `qwenResourceUrl` stores DashScope API endpoint (`https://dashscope.aliyuncs.com/api/v1/`)
 - **Model Integration**: All 9 Qwen models available through OAuth-authenticated API calls
+- **IPC Security**: Qwen OAuth channels (`qwen-oauth:device-code`, `qwen-oauth:token`) whitelisted in preload.ts
 
 ### Project Launch Verification
 - **Code Changes**: No code modifications
