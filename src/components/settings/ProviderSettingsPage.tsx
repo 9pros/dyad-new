@@ -284,6 +284,7 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
           hasFreeTier={hasFreeTier}
           providerWebsiteUrl={providerWebsiteUrl}
           isDyad={isDyad}
+          isQwen={isQwen}
           onBackClick={() => router.history.back()}
         />
 

@@ -23,6 +23,7 @@ interface ProviderSettingsHeaderProps {
   hasFreeTier?: boolean;
   providerWebsiteUrl?: string;
   isDyad: boolean;
+  isQwen?: boolean; // Add Qwen flag
   onBackClick: () => void;
 }
 
@@ -48,6 +49,7 @@ export function ProviderSettingsHeader({
   hasFreeTier,
   providerWebsiteUrl,
   isDyad,
+  isQwen = false, // Add Qwen flag with default
   onBackClick,
 }: ProviderSettingsHeaderProps) {
   const handleGetApiKeyClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -100,7 +102,7 @@ export function ProviderSettingsHeader({
             {isLoading
               ? "Loading..."
               : isConfigured
-                ? "Setup Complete"
+                ? isQwen ? "Verified" : "Setup Complete"
                 : "Not Setup"}
           </span>
         </div>
@@ -114,6 +116,7 @@ export function ProviderSettingsHeader({
 
       {providerWebsiteUrl &&
         !isLoading &&
+        !isQwen && // Don't show ConfigureButton for Qwen
         (!isConfigured ? (
           <Popover defaultOpen>
             <PopoverTrigger asChild>{ConfigureButton}</PopoverTrigger>
