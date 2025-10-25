@@ -375,6 +375,21 @@ function getRegularModelClient(
         backupModelClients: [],
       };
     }
+    case "bedrock": {
+      // AWS Bedrock supports API key authentication using AWS_BEARER_TOKEN_BEDROCK
+      // See: https://sdk.vercel.ai/providers/ai-sdk-providers/amazon-bedrock#api-key-authentication
+      const provider = createAmazonBedrock({
+        apiKey: apiKey,
+        region: getEnvVar("AWS_REGION") || "us-east-1",
+      });
+      return {
+        modelClient: {
+          model: provider(model.name),
+          builtinProviderId: providerId,
+        },
+        backupModelClients: [],
+      };
+    }
     case "qwen": {
       // Qwen uses DashScope API with OAuth token
       const qwenToken = settings.qwenAccessToken?.value;

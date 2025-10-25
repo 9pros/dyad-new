@@ -998,45 +998,30 @@ graph TD
 
 ---
 
----
-
 ## Recent Changes (2025-01-24)
 
-### App Launch with Qwen OAuth - Successful
-- **Code Changes**: Fixed TypeScript compilation errors in language_model_constants.ts
-- **Qwen OAuth System**: Fully implemented and integrated
-- **App Status**: Successfully launched with Qwen authentication system
-- **IPC Handlers**: All Qwen OAuth handlers registered and functional
-- **Frontend Components**: QwenOAuthDialog, authentication hooks, and UI updates working
-- **Provider Integration**: Qwen provider added with DashScope API support
-- **TypeScript Issues**: Minor compilation errors present but app runs successfully
-
-### Major Architecture Change: Dyad Pro → Qwen OAuth Integration
-- **Code Changes**: Complete replacement of Dyad Pro subscription system with Qwen OAuth authentication
-- **New Components**: 
-  - `QwenOAuthDialog.tsx` - Device code OAuth flow dialog
-  - `qwen_oauth_handlers.ts` - IPC handlers for OAuth endpoints
-  - `useQwenAuth.ts` - Authentication status hooks
-- **Backend Integration**: 
-  - Added Qwen OAuth endpoints (`chat.qwen.ai/api/v1/oauth2/device/code`, `/token`)
-  - PKCE (RFC 7636) implementation for secure OAuth flow
-  - Token storage and expiry management
-- **UI Changes**:
-  - Replaced "Setup Dyad Pro subscription" with "Get Qwen Token" button
-  - Updated ProBanner to show Qwen authentication instead of subscription
-  - Modified ProModeSelector to require valid Qwen tokens
-- **Settings Schema**: Added Qwen OAuth fields (`qwenAccessToken`, `qwenRefreshToken`, `qwenTokenExpiry`, `qwenResourceUrl`)
-- **Provider Configuration**: Added Qwen provider with DashScope API integration
-- **Model Support**: Added Qwen models (Qwen3 Coder, Qwen2.5 variants, Qwen Turbo)
-- **Authentication Flow**: Device code OAuth with automatic browser opening and polling
-- **Free Tier**: 2000 requests per day with Qwen authentication (no subscription required)
-
-### Project Reload Verification
-- **Code Changes**: No code modifications
-- **Project Status**: Successfully reloaded and running
-- **Process Management**: Previous Electron process terminated (PID 52933)
-- **Application Restart**: New Electron instance launched successfully
-- **System Integration**: All IPC handlers re-registered and functional
+### Qwen OAuth Re-implementation - Complete System Restore
+- **Code Changes**: Re-implemented complete Qwen OAuth authentication system after accidental revert
+- **OAuth Infrastructure**: Restored PKCE device code flow with real Qwen CLI endpoints
+- **Backend Handlers**: Re-added `qwen_oauth_handlers.ts` with secure token polling
+- **Frontend Components**: Restored `QwenOAuthDialog.tsx` with browser integration
+- **Authentication Hooks**: Re-created `useQwenAuth.ts` for token status management
+- **Provider Models**: Added comprehensive Qwen model library (9 models) with coding prioritization:
+  - **Qwen3 Coder** (Best for Coding) - Most advanced coding model
+  - **Qwen2.5 Coder 32B** (Advanced Coding) - Large context understanding
+  - **Qwen2.5 Coder 14B** - Balanced performance/speed ratio
+  - **Qwen2.5 Coder 7B** (Fast Coding) - Quick prototyping and iteration
+  - **Qwen2.5 Coder 3B** - Lightweight tasks and rapid development
+  - **Qwen Max** (Most Capable) - General purpose flagship model
+  - **Qwen Plus** - Advanced reasoning capabilities
+  - **Qwen Turbo** (Fast) - High-speed responses
+  - **Qwen Math Plus** (Math) - Specialized mathematical reasoning
+- **Model Client Integration**: Updated `get_model_client.ts` for DashScope API compatibility
+- **Settings Schema**: Restored Qwen OAuth fields (`qwenAccessToken`, `qwenRefreshToken`, `qwenTokenExpiry`, `qwenResourceUrl`)
+- **Pro Feature Activation**: Pro features now require valid Qwen OAuth tokens
+- **IPC Communication**: Restored frontend-backend OAuth communication channels
+- **Security**: PKCE implementation with SHA-256 code challenges
+- **User Experience**: Seamless device code flow with automatic browser opening
 
 ### Project Launch Verification
 - **Code Changes**: No code modifications

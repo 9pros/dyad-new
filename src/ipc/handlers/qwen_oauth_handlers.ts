@@ -59,7 +59,7 @@ export interface QwenTokenResponse {
  */
 handle(
   "qwen-oauth:device-code",
-  async (): Promise<QwenDeviceCodeResponse> => {
+  async (): Promise<QwenDeviceCodeResponse & { code_verifier: string }> => {
     try {
       // Generate PKCE code verifier and challenge
       const codeVerifier = generateCodeVerifier();
@@ -84,11 +84,10 @@ handle(
 
       const data = await response.json();
 
-      // Store the code verifier for later token exchange
-      // We'll need to return it so the frontend can use it for token polling
+      // Return the device code data along with the code verifier for token exchange
       return {
         ...data,
-        code_verifier: codeVerifier, // Include this for token exchange
+        code_verifier: codeVerifier,
       };
     } catch (error) {
       logger.error("Failed to get Qwen device code:", error);
