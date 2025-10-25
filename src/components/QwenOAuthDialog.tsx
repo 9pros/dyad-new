@@ -85,8 +85,8 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
 
       // Success! Store the tokens
       await updateSettings({
-        qwenAccessToken: result.access_token,
-        qwenRefreshToken: result.refresh_token || '',
+        qwenAccessToken: { value: result.access_token },
+        qwenRefreshToken: { value: result.refresh_token || '' },
         qwenTokenExpiry: Date.now() + (result.expires_in * 1000),
         qwenResourceUrl: result.resource_url || 'https://dashscope.aliyuncs.com/api/v1/',
       });
