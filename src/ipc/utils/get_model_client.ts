@@ -393,9 +393,8 @@ function getRegularModelClient(
     case "qwen": {
       // Qwen uses OAuth token with Qwen's API
       const qwenToken = settings.qwenAccessToken?.value;
-      // Construct proper API URL from resource URL
-      const resourceUrl = settings.qwenResourceUrl || "https://portal.qwen.ai";
-      const qwenBaseUrl = resourceUrl.replace(/\/$/, '') + '/api/v1'; // Remove trailing slash and add /api/v1
+      // Use the real Qwen API endpoint as documented
+      const qwenBaseUrl = "https://chat.qwen.ai/api/v1";
 
       if (!qwenToken) {
         throw new Error("Qwen access token is required. Please authenticate with Qwen first.");
