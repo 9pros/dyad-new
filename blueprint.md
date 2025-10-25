@@ -456,4 +456,28 @@ CREATE TABLE prompts (
 
 ---
 
+## Recent Changes (2025-01-24)
+
+### Pro Feature Unlocking
+All Dyad Pro restrictions have been removed to enable full access to premium features without subscription requirements:
+
+**Code Changes:**
+- `src/lib/schemas.ts`: Modified `hasDyadProKey()` and `isDyadProEnabled()` functions to always return `true`
+- `src/components/ProBanner.tsx`: Updated to always show "Manage Dyad Pro subscription" instead of restriction banners
+- `src/components/ProModeSelector.tsx`: Removed Pro key requirements and UI restrictions
+
+**Features Now Always Available:**
+- Turbo Edits (Lazy Edits Mode)
+- Smart Context (Conservative/Balanced modes)
+- Web Search functionality
+- All premium AI models and providers
+- Advanced chat modes
+
+**Repository Migration:**
+- Disconnected from original `dyad-sh/dyad` repository
+- Created new repository at `9pros/dyad-new`
+- All changes committed and pushed to new repository
+
+---
+
 *This blueprint serves as the comprehensive reference for the Dyad codebase. Update this file whenever significant changes are made to maintain accurate documentation.*
