@@ -506,6 +506,7 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       tagColor: "#06b6d4",
     },
   ],
+};
 
 export const TURBO_MODELS: LanguageModel[] = [
   {

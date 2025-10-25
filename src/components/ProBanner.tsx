@@ -46,6 +46,8 @@ export function GetQwenTokenButton({ onClick }: { onClick: () => void }) {
       Get Qwen Token
     </Button>
   );
+}
+
 export function ManageDyadProButton() {
   return (
     <Button

@@ -17,9 +17,8 @@ import {
   VertexProviderSetting,
 } from "@/lib/schemas";
 
-import { ProviderSettingsHeader } from "./ProviderSettingsHeader";
-import { ApiKeyConfiguration } from "./ApiKeyConfiguration";
-import { ModelsSection } from "./ModelsSection";
+import { QwenOAuthDialog } from "@/components/QwenOAuthDialog";
+import { useIsQwenAuthenticated } from "@/hooks/useQwenAuth";
 
 interface ProviderSettingsPageProps {
   provider: string;
@@ -55,9 +54,9 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
   const supportsCustomModels =
     providerData?.type === "custom" || providerData?.type === "cloud";
 
-  const isDyad = provider === "auto";
-
-  const [apiKeyInput, setApiKeyInput] = useState("");
+  const isQwen = provider === "qwen";
+  const isQwenAuthenticated = useIsQwenAuthenticated();
+  const [isQwenDialogOpen, setIsQwenDialogOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const router = useRouter();
@@ -111,11 +110,13 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
       : false;
 
   const isConfigured =
-    provider === "azure"
-      ? isAzureConfigured
-      : provider === "vertex"
-        ? isVertexConfigured
-        : isValidUserKey || hasEnvKey; // Configured if either is set
+    isQwen
+      ? isQwenAuthenticated
+      : provider === "azure"
+        ? isAzureConfigured
+        : provider === "vertex"
+          ? isVertexConfigured
+          : isValidUserKey || hasEnvKey; // Configured if either is set
 
   // --- Save Handler ---
   const handleSaveKey = async (value: string) => {
@@ -293,6 +294,59 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
               Could not load configuration data: {settingsError.message}
             </AlertDescription>
           </Alert>
+        ) : isQwen ? (
+          // Special handling for Qwen OAuth
+          <div className="space-y-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+              <h2 className="text-lg font-medium mb-4">Qwen Authentication</h2>
+              {isQwenAuthenticated ? (
+                <div className="space-y-4">
+                  <Alert>
+                    <KeyRound className="h-4 w-4" />
+                    <AlertTitle>Qwen Authentication Successful</AlertTitle>
+                    <AlertDescription>
+                      You are authenticated with Qwen and can use all 9 Qwen models with 2000 free requests per day.
+                    </AlertDescription>
+                  </Alert>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-medium">Re-authenticate with Qwen</h3>
+                      <p className="text-sm text-muted-foreground">
+                        If your token has expired or you want to re-authenticate
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => setIsQwenDialogOpen(true)}
+                      variant="outline"
+                    >
+                      Re-authenticate
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <Alert>
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle>Authentication Required</AlertTitle>
+                    <AlertDescription>
+                      Click the button below to authenticate with Qwen and unlock all 9 Qwen models with 2000 free requests per day.
+                    </AlertDescription>
+                  </Alert>
+                  <Button
+                    onClick={() => setIsQwenDialogOpen(true)}
+                    className="w-full"
+                  >
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    Get Qwen Token
+                  </Button>
+                </div>
+              )}
+            </div>
+            <QwenOAuthDialog
+              isOpen={isQwenDialogOpen}
+              onClose={() => setIsQwenDialogOpen(false)}
+            />
+          </div>
         ) : (
           <ApiKeyConfiguration
             provider={provider}

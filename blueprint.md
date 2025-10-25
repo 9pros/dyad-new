@@ -1007,28 +1007,20 @@ graph TD
 - **Application Status**: Successfully launched and fully functional with Qwen OAuth system
 - **Qwen Integration**: Complete device code OAuth flow ready for testing
 
-### Qwen OAuth Re-implementation - Complete System Restore
-- **Code Changes**: Re-implemented complete Qwen OAuth authentication system after accidental revert
-- **OAuth Infrastructure**: Restored PKCE device code flow with real Qwen CLI endpoints
-- **Backend Handlers**: Re-added `qwen_oauth_handlers.ts` with secure token polling
-- **Frontend Components**: Restored `QwenOAuthDialog.tsx` with browser integration
-- **Authentication Hooks**: Re-created `useQwenAuth.ts` for token status management
-- **Provider Models**: Added comprehensive Qwen model library (9 models) with coding prioritization:
-  - **Qwen3 Coder** (Best for Coding) - Most advanced coding model
-  - **Qwen2.5 Coder 32B** (Advanced Coding) - Large context understanding
-  - **Qwen2.5 Coder 14B** - Balanced performance/speed ratio
-  - **Qwen2.5 Coder 7B** (Fast Coding) - Quick prototyping and iteration
-  - **Qwen2.5 Coder 3B** - Lightweight tasks and rapid development
-  - **Qwen Max** (Most Capable) - General purpose flagship model
-  - **Qwen Plus** - Advanced reasoning capabilities
-  - **Qwen Turbo** (Fast) - High-speed responses
-  - **Qwen Math Plus** (Math) - Specialized mathematical reasoning
-- **Model Client Integration**: Updated `get_model_client.ts` for DashScope API compatibility
-- **Settings Schema**: Restored Qwen OAuth fields (`qwenAccessToken`, `qwenRefreshToken`, `qwenTokenExpiry`, `qwenResourceUrl`)
-- **Pro Feature Activation**: Pro features now require valid Qwen OAuth tokens
-- **IPC Communication**: Restored frontend-backend OAuth communication channels
-- **Security**: PKCE implementation with SHA-256 code challenges
-- **User Experience**: Seamless device code flow with automatic browser opening
+### Qwen OAuth Provider Integration - Settings Page
+- **Settings UI**: Qwen provider now shows "Get Qwen Token" button instead of API key input
+- **OAuth Flow**: Clicking "Get Qwen Token" triggers the complete device code OAuth flow
+- **Authentication Status**: Provider shows "Ready" when Qwen tokens are valid and "Needs Setup" when expired
+- **Token Management**: Automatic token expiry checking and re-authentication prompts
+- **User Experience**: Seamless OAuth flow with browser auto-opening and code display
+- **Free Tier Access**: 2000 requests/day through Qwen account authentication
+
+### Provider Configuration Logic
+- **Qwen Special Handling**: `ProviderSettingsPage.tsx` detects `provider === "qwen"` and renders OAuth UI
+- **Status Detection**: `useIsQwenAuthenticated()` hook checks token validity for "Ready" status
+- **Token Storage**: Qwen tokens stored in `qwenAccessToken`, `qwenRefreshToken`, `qwenTokenExpiry` settings
+- **Base URL Management**: `qwenResourceUrl` stores DashScope API endpoint (`https://dashscope.aliyuncs.com/api/v1/`)
+- **Model Integration**: All 9 Qwen models available through OAuth-authenticated API calls
 
 ### Project Launch Verification
 - **Code Changes**: No code modifications
