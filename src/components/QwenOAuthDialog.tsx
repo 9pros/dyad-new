@@ -22,18 +22,21 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const [pollingStartTime, setPollingStartTime] = useState<number>(0);
+  const [deviceCodeExpiry, setDeviceCodeExpiry] = useState<number>(0);
   const { updateSettings } = useSettings();
 
   const startOAuthFlow = async () => {
     try {
       setIsLoading(true);
       setError('');
+      setDeviceCodeExpiry(0); // Reset expiry time
 
       const result = await IpcClient.getInstance().qwenOAuthDeviceCode();
 
       setDeviceCode(result.device_code);
       setUserCode(result.user_code);
       setVerificationUrl(result.verification_uri_complete);
+      setDeviceCodeExpiry(Date.now() + (result.expires_in * 1000)); // Set actual expiry time
 
       // Open the verification URL in browser
       await IpcClient.getInstance().openExternalUrl(result.verification_uri_complete);
@@ -55,13 +58,12 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
   };
 
   const pollForToken = async (deviceCode: string, codeVerifier: string, interval: number) => {
-    // Check for timeout (15 minutes max)
-    const elapsedTime = Date.now() - pollingStartTime;
-    const maxTime = 15 * 60 * 1000; // 15 minutes
+    // Check for timeout using the actual device code expiry time
+    const now = Date.now();
 
-    if (elapsedTime > maxTime) {
-      console.log('Qwen OAuth polling timed out');
-      setError('Authentication timed out. Please try again.');
+    if (now > deviceCodeExpiry) {
+      console.log('Qwen OAuth device code expired after', Math.round((now - pollingStartTime) / 1000), 'seconds');
+      setError('Authentication timed out. The device code has expired. Please try again.');
       setStep('error');
       return;
     }
@@ -70,7 +72,8 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
       console.log('Polling for Qwen token...', {
         deviceCode: deviceCode.substring(0, 10) + '...',
         interval,
-        elapsedSeconds: Math.round(elapsedTime / 1000)
+        elapsedSeconds: Math.round((now - pollingStartTime) / 1000),
+        secondsUntilExpiry: Math.round((deviceCodeExpiry - now) / 1000)
       });
 
       const result = await IpcClient.getInstance().qwenOAuthToken({
