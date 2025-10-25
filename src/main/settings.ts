@@ -110,6 +110,21 @@ export function readSettings(): UserSettings {
         encryptionType,
       };
     }
+    // Decrypt Qwen tokens
+    if (combinedSettings.qwenAccessToken) {
+      const encryptionType = combinedSettings.qwenAccessToken.encryptionType;
+      combinedSettings.qwenAccessToken = {
+        value: decrypt(combinedSettings.qwenAccessToken),
+        encryptionType,
+      };
+    }
+    if (combinedSettings.qwenRefreshToken) {
+      const encryptionType = combinedSettings.qwenRefreshToken.encryptionType;
+      combinedSettings.qwenRefreshToken = {
+        value: decrypt(combinedSettings.qwenRefreshToken),
+        encryptionType,
+      };
+    }
     for (const provider in combinedSettings.providerSettings) {
       if (combinedSettings.providerSettings[provider].apiKey) {
         const encryptionType =
@@ -180,6 +195,13 @@ export function writeSettings(settings: Partial<UserSettings>): void {
           newSettings.neon.refreshToken.value,
         );
       }
+    }
+    // Encrypt Qwen tokens
+    if (newSettings.qwenAccessToken) {
+      newSettings.qwenAccessToken = encrypt(newSettings.qwenAccessToken.value);
+    }
+    if (newSettings.qwenRefreshToken) {
+      newSettings.qwenRefreshToken = encrypt(newSettings.qwenRefreshToken.value);
     }
     for (const provider in newSettings.providerSettings) {
       if (newSettings.providerSettings[provider].apiKey) {
