@@ -247,6 +247,12 @@ export const UserSettingsSchema = z.object({
   runtimeMode2: RuntimeMode2Schema.optional(),
   customNodePath: z.string().optional().nullable(),
 
+  // Qwen OAuth settings
+  qwenAccessToken: SecretSchema.optional(),
+  qwenRefreshToken: SecretSchema.optional(),
+  qwenTokenExpiry: z.number().optional(),
+  qwenResourceUrl: z.string().optional(),
+
   ////////////////////////////////
   // E2E TESTING ONLY.
   ////////////////////////////////
@@ -266,11 +272,19 @@ export const UserSettingsSchema = z.object({
 export type UserSettings = z.infer<typeof UserSettingsSchema>;
 
 export function isDyadProEnabled(settings: UserSettings): boolean {
-  return true; // Always enable Pro features
+  // Check if Qwen access token exists and is not expired
+  if (settings.qwenAccessToken && settings.qwenTokenExpiry) {
+    return Date.now() < settings.qwenTokenExpiry;
+  }
+  return false; // Require Qwen authentication for Pro features
 }
 
 export function hasDyadProKey(settings: UserSettings): boolean {
-  return true; // Always enable Pro features
+  // Check if Qwen access token exists and is not expired
+  if (settings.qwenAccessToken && settings.qwenTokenExpiry) {
+    return Date.now() < settings.qwenTokenExpiry;
+  }
+  return false; // Require Qwen authentication for Pro features
 }
 
 // Define interfaces for the props

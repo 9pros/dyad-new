@@ -59,7 +59,7 @@ export function ProModeSelector() {
   };
 
   const hasProKey = settings ? hasDyadProKey(settings) : false;
-  const proModeTogglable = true; // Always allow Pro features
+  const proModeTogglable = hasProKey; // Only enable if Qwen token is valid
 
   return (
     <Popover>

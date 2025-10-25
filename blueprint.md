@@ -1000,6 +1000,26 @@ graph TD
 
 ## Recent Changes (2025-01-24)
 
+### Major Architecture Change: Dyad Pro → Qwen OAuth Integration
+- **Code Changes**: Complete replacement of Dyad Pro subscription system with Qwen OAuth authentication
+- **New Components**: 
+  - `QwenOAuthDialog.tsx` - Device code OAuth flow dialog
+  - `qwen_oauth_handlers.ts` - IPC handlers for OAuth endpoints
+  - `useQwenAuth.ts` - Authentication status hooks
+- **Backend Integration**: 
+  - Added Qwen OAuth endpoints (`chat.qwen.ai/api/v1/oauth2/device/code`, `/token`)
+  - PKCE (RFC 7636) implementation for secure OAuth flow
+  - Token storage and expiry management
+- **UI Changes**:
+  - Replaced "Setup Dyad Pro subscription" with "Get Qwen Token" button
+  - Updated ProBanner to show Qwen authentication instead of subscription
+  - Modified ProModeSelector to require valid Qwen tokens
+- **Settings Schema**: Added Qwen OAuth fields (`qwenAccessToken`, `qwenRefreshToken`, `qwenTokenExpiry`, `qwenResourceUrl`)
+- **Provider Configuration**: Added Qwen provider with DashScope API integration
+- **Model Support**: Added Qwen models (Qwen3 Coder, Qwen2.5 variants, Qwen Turbo)
+- **Authentication Flow**: Device code OAuth with automatic browser opening and polling
+- **Free Tier**: 2000 requests per day with Qwen authentication (no subscription required)
+
 ### Project Reload Verification
 - **Code Changes**: No code modifications
 - **Project Status**: Successfully reloaded and running

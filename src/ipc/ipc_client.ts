@@ -1319,4 +1319,31 @@ export class IpcClient {
   public cancelHelpChat(sessionId: string): void {
     this.ipcRenderer.invoke("help:chat:cancel", sessionId).catch(() => {});
   }
+
+  // Qwen OAuth methods
+  public async qwenOAuthDeviceCode(): Promise<{
+    device_code: string;
+    user_code: string;
+    verification_uri: string;
+    verification_uri_complete: string;
+    expires_in: number;
+    interval: number;
+    code_verifier: string;
+  }> {
+    return this.ipcRenderer.invoke("qwen-oauth:device-code");
+  }
+
+  public async qwenOAuthToken(params: {
+    deviceCode: string;
+    codeVerifier: string;
+  }): Promise<{
+    access_token: string;
+    refresh_token?: string;
+    token_type: string;
+    expires_in: number;
+    scope: string;
+    resource_url?: string;
+  }> {
+    return this.ipcRenderer.invoke("qwen-oauth:token", params);
+  }
 }

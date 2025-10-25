@@ -408,7 +408,44 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       temperature: 0,
     },
   ],
-};
+  qwen: [
+    {
+      name: "qwen3-coder",
+      displayName: "Qwen3 Coder",
+      description: "Qwen's advanced coding model with excellent code generation capabilities",
+      maxOutputTokens: 32_000,
+      contextWindow: 131_000,
+      temperature: 0,
+      dollarSigns: 2,
+    },
+    {
+      name: "qwen2.5-coder-32b-instruct",
+      displayName: "Qwen2.5 Coder 32B",
+      description: "Large coding model optimized for code understanding and generation",
+      maxOutputTokens: 8_000,
+      contextWindow: 131_072,
+      temperature: 0,
+      dollarSigns: 3,
+    },
+    {
+      name: "qwen2.5-coder-7b-instruct",
+      displayName: "Qwen2.5 Coder 7B",
+      description: "Fast and efficient coding model for quick tasks",
+      maxOutputTokens: 8_000,
+      contextWindow: 131_072,
+      temperature: 0,
+      dollarSigns: 1,
+    },
+    {
+      name: "qwen-turbo",
+      displayName: "Qwen Turbo",
+      description: "High-speed model for rapid code generation and assistance",
+      maxOutputTokens: 8_000,
+      contextWindow: 131_072,
+      temperature: 0,
+      dollarSigns: 1,
+    },
+  ],
 
 export const TURBO_MODELS: LanguageModel[] = [
   {
@@ -514,6 +551,12 @@ export const CLOUD_PROVIDERS: Record<
     websiteUrl: "https://console.aws.amazon.com/bedrock/",
     gatewayPrefix: "bedrock/",
     secondary: true,
+  },
+  qwen: {
+    displayName: "Qwen",
+    hasFreeTier: true,
+    websiteUrl: "https://chat.qwen.ai/",
+    gatewayPrefix: "qwen/",
   },
 };
 

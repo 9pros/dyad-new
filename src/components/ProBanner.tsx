@@ -11,16 +11,40 @@ import { KeyRound } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { useUserBudgetInfo } from "@/hooks/useUserBudgetInfo";
 import { Button } from "./ui/button";
+import { QwenOAuthDialog } from "./QwenOAuthDialog";
 
 export function ProBanner() {
   const { settings } = useSettings();
   const { userBudget } = useUserBudgetInfo();
+  const [isQwenDialogOpen, setIsQwenDialogOpen] = useState(false);
 
-  // Always show manage subscription button since Pro features are always enabled
+  // Show Qwen authentication if no valid token
+  if (!settings?.qwenAccessToken || !settings?.qwenTokenExpiry || Date.now() >= settings.qwenTokenExpiry) {
+    return (
+      <div className="mt-6 max-w-2xl mx-auto">
+        <GetQwenTokenButton onClick={() => setIsQwenDialogOpen(true)} />
+        <QwenOAuthDialog
+          isOpen={isQwenDialogOpen}
+          onClose={() => setIsQwenDialogOpen(false)}
+        />
+      </div>
+    );
+  }
+
+  return null; // Hide banner when authenticated
+}
+
+export function GetQwenTokenButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className="mt-6 max-w-2xl mx-auto">
-      <ManageDyadProButton />
-    </div>
+    <Button
+      variant="outline"
+      size="lg"
+      className="w-full mt-4 bg-(--background-lighter) text-primary"
+      onClick={onClick}
+    >
+      <KeyRound aria-hidden="true" />
+      Get Qwen Token
+    </Button>
   );
 }
 
