@@ -998,6 +998,26 @@ graph TD
 
 ---
 
+## Port Configuration - Electron vs Backend Services
+
+### Development Port Separation
+- **Electron Frontend (Renderer)**: Port 3000 (Vite dev server for React UI)
+- **Backend API Services**: Port 8080 (DYAD_ENGINE_URL when using external engine)
+- **Database**: SQLite (file-based, no port required)
+- **IPC Communication**: Internal Electron channels (no network ports)
+
+### Development Scripts with Port Configuration
+- **`npm start`**: Electron app on port 3000
+- **`npm run dev`**: Development mode with clear port information display
+- **`npm run dev:engine`**: External engine on port 8080, Electron on port 3000
+- **`npm run staging:engine`**: Staging engine integration
+
+### Port Separation Benefits
+- **Conflict Prevention**: Electron dev server doesn't conflict with other services
+- **Clear Development**: Easy to identify which service runs on which port
+- **Backend Flexibility**: External APIs can run on port 8080 without conflicts
+- **Testing Isolation**: Each service can be tested independently
+
 ## Recent Changes (2025-01-24)
 
 ### Final Import Error Fix - Application Fully Functional

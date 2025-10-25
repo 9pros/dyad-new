@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "@tanstack/react-router";
-import { ArrowLeft, AlertTriangle } from "lucide-react";
+import { ArrowLeft, AlertTriangle, KeyRound } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { useLanguageModelProviders } from "@/hooks/useLanguageModelProviders";
-
+import { ProviderSettingsHeader } from "./ProviderSettingsHeader";
+import { ApiKeyConfiguration } from "./ApiKeyConfiguration";
+import { ModelsSection } from "./ModelsSection";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import {} from "@/components/ui/accordion";
@@ -57,6 +59,8 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
   const isQwen = provider === "qwen";
   const isQwenAuthenticated = useIsQwenAuthenticated();
   const [isQwenDialogOpen, setIsQwenDialogOpen] = useState(false);
+  const isDyad = provider === "auto";
+  const [apiKeyInput, setApiKeyInput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const router = useRouter();
