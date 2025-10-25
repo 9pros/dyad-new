@@ -1031,7 +1031,7 @@ graph TD
 - **Settings UI**: Qwen provider now shows "Get Qwen Token" button instead of API key input
 - **OAuth Flow**: Clicking "Get Qwen Token" triggers the complete device code OAuth flow
 - **Authentication Status**: Provider shows "Ready" when Qwen tokens are valid and "Needs Setup" when expired
-- **Token Management**: Automatic token expiry checking and re-authentication prompts
+- **UI Improvements**: Show "Verified" status for authenticated Qwen users, removed duplicate API key button, single OAuth authentication flow prompts
 - **User Experience**: Seamless OAuth flow with browser auto-opening and code display
 - **Free Tier Access**: 2000 requests/day through Qwen account authentication
 
