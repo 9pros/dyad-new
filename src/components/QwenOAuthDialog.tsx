@@ -36,7 +36,13 @@ export function QwenOAuthDialog({ isOpen, onClose }: QwenOAuthDialogProps) {
       setDeviceCode(result.device_code);
       setUserCode(result.user_code);
       setVerificationUrl(result.verification_uri_complete);
-      setDeviceCodeExpiry(Date.now() + (result.expires_in * 1000)); // Set actual expiry time
+
+      // Handle expires_in - if it's unreasonably large (> 1 hour), assume it's in milliseconds
+      let expiresInSeconds = result.expires_in;
+      if (expiresInSeconds > 3600) { // If > 1 hour, probably in milliseconds
+        expiresInSeconds = Math.min(expiresInSeconds / 1000, 3600); // Convert to seconds, cap at 1 hour
+      }
+      setDeviceCodeExpiry(Date.now() + (expiresInSeconds * 1000));
 
       // Open the verification URL in browser
       await IpcClient.getInstance().openExternalUrl(result.verification_uri_complete);
