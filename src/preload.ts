@@ -121,6 +121,9 @@ const validInvokeChannels = [
   "mcp:set-tool-consent",
   // MCP consent response from renderer to main
   "mcp:tool-consent-response",
+  // Qwen OAuth
+  "qwen-oauth:device-code",
+  "qwen-oauth:token",
   // Help bot
   "help:chat:start",
   "help:chat:cancel",
